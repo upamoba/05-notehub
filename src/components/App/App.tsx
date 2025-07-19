@@ -15,6 +15,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import EmptyState from '../EmptyState/EmptyState';
 import styles from './App.module.css';
 
+
 const PER_PAGE = 12;
 
 const App: React.FC = () => {
@@ -25,11 +26,11 @@ const App: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
-    queryKey: ['notes', page, debouncedSearch],
-    queryFn: () => fetchNotes(page, PER_PAGE, debouncedSearch),
-    keepPreviousData: true,
-    staleTime: 60000,
-  });
+  queryKey: ['notes', page, debouncedSearch],
+  queryFn: () => fetchNotes({ page, perPage: PER_PAGE, search: debouncedSearch }),
+  keepPreviousData: true,
+  staleTime: 60000,
+});
 
     const createMutation = useMutation<Note, Error, CreateNotePayload>({
     mutationFn: createNote,

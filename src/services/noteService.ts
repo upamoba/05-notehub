@@ -1,0 +1,33 @@
+import axios from 'axios';
+import type { Note, FetchNotesResponse } from '../types/note';
+
+const API = axios.create({
+  baseURL: 'https://notehub-public.goit.study/api',
+  headers: {
+    Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}`,
+  },
+});
+
+export const fetchNotes = async (
+  page: number,
+  perPage: number,
+  search?: string
+): Promise<FetchNotesResponse> => {
+  const params: Record<string, string | number> = { page, perPage };
+  if (search) params.search = search;
+  const { data } = await API.get<FetchNotesResponse>('/notes', { params });
+  return data;
+};
+
+export const createNote = async (payload: {
+  title: string;
+  text: string;
+  tag: string;
+}): Promise<Note> => {
+  const { data } = await API.post<Note>('/notes', payload);
+  return data;
+};
+
+export const deleteNote = async (id: string): Promise<void> => {
+  await API.delete(`/notes/${id}`);
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import{ useState} from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import type { FetchNotesResponse, CreateNotePayload } from '../../services/noteService';
@@ -21,15 +21,14 @@ const PER_PAGE = 12;
 const App: React.FC = () => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>('');
-  const [debouncedSearch] = useDebounce<string>(search, 500);
+  const [debouncedSearch] = useDebounce<string>(search, 300);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
   queryKey: ['notes', page, debouncedSearch],
   queryFn: () => fetchNotes({ page, perPage: PER_PAGE, search: debouncedSearch }),
-  keepPreviousData: true,
-  staleTime: 60000,
+  placeholderData:keepPreviousData
 });
 
     const createMutation = useMutation<Note, Error, CreateNotePayload>({

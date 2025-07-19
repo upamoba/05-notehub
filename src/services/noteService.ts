@@ -2,8 +2,7 @@
 import axios from 'axios';
 import type { Note, NoteTag } from '../types/note';
 
-// export interface PaginationMeta { page: number;
-//    perPage: number; totalPages: number; totalItems: number; }
+
 
 
 export interface FetchNotesResponse {

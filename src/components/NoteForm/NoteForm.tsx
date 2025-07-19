@@ -44,28 +44,28 @@ const NoteForm: FC<NoteFormProps> = ({ onSubmit, onCancel }) => (
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="text">Content</label>
+          <label htmlFor="content">Content</label>
           <Field
             as="textarea"
-            id="text"
-            name="text"
-            rows={8}
+            id="content"
+            name="content"
+            rows={6}
             className={styles.textarea}
           />
-          <ErrorMessage name="text" component="span" className={styles.error} />
+          <ErrorMessage name="content" component="span" className={styles.error} />
         </div>
-
-        <div className={styles.formGroup}>
+ <div className={styles.formGroup}>
           <label htmlFor="tag">Tag</label>
           <Field as="select" id="tag" name="tag" className={styles.select}>
-            {['Todo', 'Work', 'Personal', 'Meeting', 'Shopping'].map(tag => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
+            <option value="Todo">Todo</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Shopping">Shopping</option>
           </Field>
           <ErrorMessage name="tag" component="span" className={styles.error} />
         </div>
+        
 
         <div className={styles.actions}>
           <button

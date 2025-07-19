@@ -6,7 +6,7 @@ import type { NoteTag } from '../../types/note';
 
 export interface NoteFormValues {
   title: string;
-  text: string;
+  content: string;
   tag: NoteTag;
 }
 
@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 
 const NoteForm: FC<NoteFormProps> = ({ onSubmit, onCancel }) => (
   <Formik<NoteFormValues>
-    initialValues={{ title: '', text: '', tag: 'Todo' }}
+    initialValues={{ title: '', content: '', tag: 'Todo' }}
     validationSchema={validationSchema}
     onSubmit={(values, { resetForm }) => {
       onSubmit(values);

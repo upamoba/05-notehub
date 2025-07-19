@@ -2,7 +2,8 @@
 import axios from 'axios';
 import type { Note, NoteTag } from '../types/note';
 
-export interface PaginationMeta { page: number; perPage: number; totalPages: number; totalItems: number; }
+// export interface PaginationMeta { page: number;
+//    perPage: number; totalPages: number; totalItems: number; }
 
 
 export interface FetchNotesResponse {
@@ -12,9 +13,14 @@ export interface FetchNotesResponse {
   perPage: number;
   totalPages: number;
 }
-export interface CreateNotePayload { title: string; text: string; tag: NoteTag; }
+export interface CreateNotePayload { title: string;
+   content: string;
+    tag: NoteTag; }
 
-const API = axios.create({ baseURL: 'https://notehub-public.goit.study/api', headers: { Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}` } });
+const API = axios.create({
+  baseURL: 'https://notehub-public.goit.study/api',
+  headers: { Authorization: `Bearer ${import.meta.env.VITE_NOTEHUB_TOKEN}` }
+});
 export const fetchNotes = async ({
   page,
   perPage,
@@ -29,4 +35,5 @@ export const fetchNotes = async ({
 export const createNote = async (payload: CreateNotePayload): Promise<Note> => {
   const { data } = await API.post<Note>('/notes', payload); return data;
 };
-export const deleteNote = async (id: string): Promise<void> => { await API.delete(`/notes/${id}`); };
+export const deleteNote = async (id: string): Promise<void> =>
+   { await API.delete(`/notes/${id}`); };

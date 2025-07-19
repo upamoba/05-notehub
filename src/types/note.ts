@@ -1,20 +1,10 @@
 export interface Note {
   id: string;
   title: string;
-  text: string;
-  tag: string;
+  content: string;
+  tag: NoteTag;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface PaginationMeta {
-  page: number;
-  perPage: number;
-  totalPages: number;
-  totalItems: number;
-}
-
-export interface FetchNotesResponse {
-  data: Note[];
-  meta: PaginationMeta;
-}
+export type NoteTag = 'Todo' | 'Work' | 'Personal' | 'Meeting' | 'Shopping';

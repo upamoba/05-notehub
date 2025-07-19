@@ -1,5 +1,5 @@
 import{ useState} from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import {keepPreviousData, useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
 import type { FetchNotesResponse, CreateNotePayload } from '../../services/noteService';
 import { fetchNotes, createNote, deleteNote } from '../../services/noteService';

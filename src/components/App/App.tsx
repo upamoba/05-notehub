@@ -17,26 +17,28 @@ import styles from './App.module.css';
 const PER_PAGE = 12;
 
 const App: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [debouncedSearch] = useDebounce(search, 500);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>('');
+  const [debouncedSearch] = useDebounce<string>(search, 500);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery<FetchNotesResponse>(
-    ['notes', page, debouncedSearch],
-    () => fetchNotes(page, PER_PAGE, debouncedSearch),
-    { keepPreviousData: true, staleTime: 60000 }
-  );
+  const { data, isLoading, isError } = useQuery<FetchNotesResponse>({
+    queryKey: ['notes', page, debouncedSearch],
+    queryFn: () => fetchNotes(page, PER_PAGE, debouncedSearch),
+    keepPreviousData: true,
+    staleTime: 60000,
+  });
 
-  const createMutation = useMutation<Note, unknown, CreateNotePayload>(
-    createNote,
-    { onSuccess: () => queryClient.invalidateQueries(['notes']) }
-  );
-  const deleteMutation = useMutation<void, unknown, string>(
-    deleteNote,
-    { onSuccess: () => queryClient.invalidateQueries(['notes']) }
-  );
+  const createMutation = useMutation<Note, Error, CreateNotePayload>({
+    mutationFn: createNote,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
+  });
+
+  const deleteMutation = useMutation<void, Error, string>({
+    mutationFn: deleteNote,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
+  });
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -44,11 +46,7 @@ const App: React.FC = () => {
   };
 
   const handleCreate = (values: NoteFormValues) => {
-    createMutation.mutate({
-      title: values.title,
-      text: values.text,
-      tag: values.tag,
-    });
+    createMutation.mutate(values);
     setIsModalOpen(false);
   };
 
@@ -61,7 +59,7 @@ const App: React.FC = () => {
       <header className={styles.toolbar}>
         <SearchBox value={search} onChange={handleSearchChange} />
 
-        {data?.meta.totalPages && data.meta.totalPages > 1 && (
+        {data?.meta.totalPages! > 1 && (
           <Pagination
             pageCount={data.meta.totalPages}
             currentPage={page}
@@ -80,7 +78,7 @@ const App: React.FC = () => {
       {isLoading && <LoadingIndicator message="Loading notes…" />}
       {isError && <ErrorMessage message="Error loading notes." />}
 
-      {!isLoading && data && data.data.length > 0 ? (
+      {!isLoading && data?.data.length ? (
         <NoteList notes={data.data} onDelete={handleDelete} />
       ) : (
         !isLoading && <EmptyState message="No notes found." />
@@ -88,10 +86,7 @@ const App: React.FC = () => {
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
-          <NoteForm
-            onSubmit={handleCreate}
-            onCancel={() => setIsModalOpen(false)}
-          />
+          <NoteForm onSubmit={handleCreate} onCancel={() => setIsModalOpen(false)} />
         </Modal>
       )}
     </div>

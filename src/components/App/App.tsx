@@ -8,6 +8,7 @@ import SearchBox from '../SearchBox/SearchBox';
 import Pagination from '../Pagination/Pagination';
 import NoteList from '../NoteList/NoteList';
 import Modal from '../Modal/Modal';
+import NoteForm from '../NoteForm/NoteForm';
 import type { NoteFormValues } from '../NoteForm/NoteForm';
 import LoadingIndicator from '../LoadingIndicator/LoadingIndicator';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
@@ -23,14 +24,14 @@ const App: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery<FetchNotesResponse>({
+  const { data, isLoading, isError } = useQuery<FetchNotesResponse, Error>({
     queryKey: ['notes', page, debouncedSearch],
     queryFn: () => fetchNotes(page, PER_PAGE, debouncedSearch),
     keepPreviousData: true,
     staleTime: 60000,
   });
 
-  const createMutation = useMutation<Note, Error, CreateNotePayload>({
+    const createMutation = useMutation<Note, Error, CreateNotePayload>({
     mutationFn: createNote,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
   });
@@ -39,6 +40,7 @@ const App: React.FC = () => {
     mutationFn: deleteNote,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
   });
+ 
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -59,9 +61,9 @@ const App: React.FC = () => {
       <header className={styles.toolbar}>
         <SearchBox value={search} onChange={handleSearchChange} />
 
-        {data?.meta.totalPages! > 1 && (
+        { data && data.totalPages > 1 && (
           <Pagination
-            pageCount={data.meta.totalPages}
+            pageCount={data.totalPages}
             currentPage={page}
             onPageChange={setPage}
           />
@@ -78,8 +80,8 @@ const App: React.FC = () => {
       {isLoading && <LoadingIndicator message="Loading notes…" />}
       {isError && <ErrorMessage message="Error loading notes." />}
 
-      {!isLoading && data?.data.length ? (
-        <NoteList notes={data.data} onDelete={handleDelete} />
+      {!isLoading && data && data.notes.length ? (
+        <NoteList notes={data.notes} onDelete={handleDelete} />
       ) : (
         !isLoading && <EmptyState message="No notes found." />
       )}

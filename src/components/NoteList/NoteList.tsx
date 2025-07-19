@@ -7,6 +7,7 @@ import styles from './NoteList.module.css';
 interface NoteListProps{
   notes:Note[];
   onDelete:(id:string)=>void;}
+  
 const NoteList:FC<NoteListProps>=({notes, onDelete})=>{
   if(!notes.length)return null;
   return (

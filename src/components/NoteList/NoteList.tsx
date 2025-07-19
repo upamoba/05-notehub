@@ -14,7 +14,7 @@ const NoteList:FC<NoteListProps>=({notes, onDelete})=>{
       {notes.map(note=>(
         <li key={note.id} className={styles.listItem}>
           <h2 className={styles.title}>{note.title}</h2>
-          <p className={styles.content}>{note.text}</p>
+          <p className={styles.content}>{note.content}</p>
           <div className={styles.footer}>
             <span className={styles.tag}>{note.tag}</span>
             <button className={styles.button} onClick={()=>onDelete(note.id)}>Delete</button>

@@ -1,26 +1,20 @@
-import type { FC } from 'react';
-import ReactPaginate from 'react-paginate';
-import styles from './Pagination.module.css';
+import ReactPaginate from "react-paginate";
+import css from "../Pagination/Pagination.module.css";
 
 interface PaginationProps{
-pageCount:number;
-currentPage:number;
-onPageChange:(page:number) => void;}
+    currentPage: number;
+    totalPages: number;
+    onPageChange: (selected: number) => void;
+}
 
-const Pagination:FC<PaginationProps> =({pageCount,currentPage,onPageChange})=> 
-<ReactPaginate 
-pageCount={pageCount} 
-forcePage={currentPage-1} 
-onPageChange={({selected})=>onPageChange(selected + 1)} 
-containerClassName={styles.pagination} 
-pageLinkClassName={styles.pageLink} 
-activeClassName={styles.active} 
-disabledClassName={styles.disabled} 
-previousLabel="<" 
-nextLabel=">" 
-breakLabel="..." 
-marginPagesDisplayed={1} 
-pageRangeDisplayed={3}
-/>;
-
-export default Pagination;
+export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+    return (
+        <ReactPaginate
+            pageCount={totalPages}
+            forcePage={currentPage - 1}
+            onPageChange={(e) => onPageChange(e.selected + 1)}
+            containerClassName={css.pagination}
+            activeClassName={css.active}
+        />
+    );
+};

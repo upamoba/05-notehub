@@ -3,7 +3,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchNotes } from '../../services/noteService';
 import { useDebounce } from 'use-debounce';
 import NoteList from '../NoteList/NoteList';
-import Paginaition from '../Pagination/Pagination';
+import Pagination from '../Pagination/Pagination';
 import SearchBox from '../SearchBox/SearchBox';
 import Modal from '../Modal/Modal';
 import NoteForm from '../NoteForm/NoteForm';
@@ -40,7 +40,7 @@ export default function App() {
         {isLoading && <Loader />}
         {isError && <ErrorMessage />}
         {data && data.total_pages > 1 && (
-          <Paginaition
+          <Pagination
             currentPage={page}
             totalPages={data.total_pages}
             onPageChange={setPage}

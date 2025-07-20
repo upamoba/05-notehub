@@ -1,6 +1,14 @@
-import type {FC}from 'react';
-import styles from'./EmptyState.module.css';
-interface P{message?:string;}
-const ES:FC<P>=({message='No items found.'})=> <p className={styles.text}>{message}</p>;
 
-export default ES;
+import styles from './EmptyState.module.css';
+
+interface EmptyStateProps {
+  text?: string;
+}
+
+export default function EmptyState({ text }: EmptyStateProps) {
+  return (
+    <div className={styles.empty}>
+      <p>{text || 'No items found.'}</p>
+    </div>
+  );
+}
